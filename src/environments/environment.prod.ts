@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  serverApi: 'http://central-lending-api.azurewebsites.net'
 };
