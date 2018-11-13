@@ -1,0 +1,64 @@
+<div class="panel-header panel-header-sm">
+</div>
+<div class="main-content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title"> Projets</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Nom
+                </th>
+                <th>
+                  Plateforme
+                </th>
+                <th>
+                  Note
+                </th>
+                <th>
+                  Montant
+                </th>
+                <th>
+                  Taux
+                </th>
+                <th >
+                  Durée
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let project of projects; trackBy:identify">
+                  <td>
+                      <a href="{{project.link}}">
+                      {{project.name}}
+                      </a>
+                  </td>
+                  <td>
+                      {{project.platform}}
+                  </td>
+                  <td>
+                      {{project.note}}
+                  </td>
+                  <td>
+                      {{project.amount | currency:'EUR'}}
+                  </td>
+                  <td>
+                      {{project.rate}} %
+                  </td>
+                  <td>
+                      {{project.term}}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
