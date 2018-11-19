@@ -1,5 +1,8 @@
 import { Routes } from '@angular/router';
 
+import { HomeComponent } from '../../home';
+import { RegisterComponent } from '../../register';
+import { LoginComponent } from '../../login';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { ProjectsComponent } from '../../projects/projects.component';
@@ -8,12 +11,17 @@ import { IconsComponent } from '../../icons/icons.component';
 import { MapsComponent } from '../../maps/maps.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
 
+import { AuthGuard } from '../../modules/core/guards';
+
 export const AdminLayoutRoutes: Routes = [
-    { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'projects',     component: ProjectsComponent },
-    { path: 'typography',     component: TypographyComponent },
-    { path: 'icons',          component: IconsComponent },
-    { path: 'maps',           component: MapsComponent },
-    { path: 'notifications',  component: NotificationsComponent },
+    { path: 'home',      component: HomeComponent },
+    { path: 'login',      component: LoginComponent },
+    { path: 'register',      component: RegisterComponent },
+    { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'user-profile',   component: UserProfileComponent, canActivate: [AuthGuard] },
+    { path: 'projects',     component: ProjectsComponent, canActivate: [AuthGuard] },
+    { path: 'typography',     component: TypographyComponent, canActivate: [AuthGuard] },
+    { path: 'icons',          component: IconsComponent, canActivate: [AuthGuard] },
+    { path: 'maps',           component: MapsComponent, canActivate: [AuthGuard] },
+    { path: 'notifications',  component: NotificationsComponent, canActivate: [AuthGuard] },
 ];

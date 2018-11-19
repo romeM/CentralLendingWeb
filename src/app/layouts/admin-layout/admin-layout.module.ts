@@ -3,6 +3,9 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AdminLayoutRoutes } from './admin-layout.routing';
+import { LoginComponent } from '../../login';
+import { RegisterComponent } from '../../register';
+import { HomeComponent } from '../../home/home.component';
 import { DashboardComponent } from '../../dashboard/dashboard.component';
 import { UserProfileComponent } from '../../user-profile/user-profile.component';
 import { ProjectsComponent } from '../../projects/projects.component';
@@ -19,11 +22,15 @@ import { ToastrModule } from 'ngx-toastr';
     CommonModule,
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
+    ReactiveFormsModule,
     ChartsModule,
     NgbModule,
     ToastrModule.forRoot()
   ],
   declarations: [
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
     DashboardComponent,
     UserProfileComponent,
     ProjectsComponent,
