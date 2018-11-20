@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // SERVICES
-import { ProjectService, UserService, AuthenticationService, AlertService } from './services';
+import { ProjectService, UserService, AuthenticationService, AlertService, UserMonthlyStatisticsService } from './services';
 
 import { AuthGuard } from './guards/auth.guard';
 import { JwtInterceptor, ErrorInterceptor } from './helpers';
@@ -11,7 +11,8 @@ let Services = [
     ProjectService,
     UserService,
     AuthenticationService,
-    AlertService
+    AlertService,
+    UserMonthlyStatisticsService
 ];
 
 @NgModule({

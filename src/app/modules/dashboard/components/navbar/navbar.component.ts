@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
-import { AlertService } from '../../../core/services';
+import { AlertService, AuthenticationService } from '../../../core/services';
 import { Router } from '@angular/router';
 import Chart from 'chart.js';
 
@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
 
     public isCollapsed = true;
 
-    constructor(location: Location,  private element: ElementRef, private router: Router, private alertService: AlertService) {
+    constructor(location: Location,  private element: ElementRef, private router: Router, private alertService: AlertService, private authenticationService: AuthenticationService) {
       this.location = location;
           this.sidebarVisible = false;
     }
@@ -140,8 +140,7 @@ export class NavbarComponent implements OnInit {
     };
     
     disconnect() {
-        localStorage.removeItem('currentUser');
-        this.alertService.success('Utilisateur deconnecté', true);
+        this.authenticationService.logout()
         this.router.navigate(['']);
     }
 

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { UserMonthlyStatisticsService } from '../../core/services';
+import { UserMonthlyStatistics } from '../../core/models';
 import * as Chartist from 'chartist';
 
 @Component({
@@ -38,6 +40,7 @@ export class DashboardComponent implements OnInit {
   public lineChartGradientsNumbersOptions:any;
   public lineChartGradientsNumbersLabels:Array<any>;
   public lineChartGradientsNumbersColors:Array<any>
+  private userMonthlyStatistics:Array<UserMonthlyStatistics>;
   // events
   public chartClicked(e:any):void {
     console.log(e);
@@ -57,9 +60,10 @@ export class DashboardComponent implements OnInit {
       return "rgb(" + r + ", " + g + ", " + b + ")";
     }
   }
-  constructor() { }
+  constructor(private userMonthlyStatisticsService: UserMonthlyStatisticsService) { }
 
   ngOnInit() {
+    this.userMonthlyStatisticsService.get().then(userMonthlyStatistics => this.userMonthlyStatistics = userMonthlyStatistics);
     this.chartColor = "#FFFFFF";
     this.canvas = document.getElementById("bigDashboardChart");
     this.ctx = this.canvas.getContext("2d");

@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { Project } from '../models/project';
+import { UserMonthlyStatistics } from '../models';
+import { UserService } from './user.service';
 import 'rxjs/add/operator/toPromise';
 import { environment } from '../../../../environments/environment';
 
 @Injectable()
-export class ProjectService {
+export class UserMonthlyStatisticsService {
 
-    constructor(private httpClient: HttpClient) {
+    constructor(private httpClient: HttpClient, private userService: UserService) {
     }
 
-    get(): Promise<Project[]> {
-        return this.httpClient.get<Project[]>(`${environment.serverApi}/api/project`).toPromise()
+    get(): Promise<UserMonthlyStatistics[]> {
+        return this.httpClient.get<UserMonthlyStatistics[]>(`${environment.serverApi}/api/usermonthlystatistics/${this.userService.currentUser().id}`).toPromise()
             .catch(this.handleError);
     }
     
