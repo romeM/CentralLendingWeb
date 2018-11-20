@@ -5,5 +5,6 @@
 
 export const environment = {
   production: false,
-  serverApi: 'https://central-lending-api.azurewebsites.net'
+  // serverApi: 'https://central-lending-api.azurewebsites.net'
+  serverApi: 'https://localhost:44335'
 };

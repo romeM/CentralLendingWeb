@@ -8,6 +8,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './modules/dashboard/components/components.module';
+import { ChartsModule } from 'ng2-charts';
+
 
 import { AppComponent } from './app.component';
 
@@ -20,6 +22,7 @@ import { DashboardLayoutComponent } from './modules/dashboard/layouts/dashboard-
 @NgModule({
   imports: [
     BrowserAnimationsModule,
+    ChartsModule,
     FormsModule,
     ReactiveFormsModule,
     CoreModule,

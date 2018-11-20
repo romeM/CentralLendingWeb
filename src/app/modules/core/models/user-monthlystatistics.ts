@@ -2,7 +2,7 @@
 
 export class UserMonthlyStatistics {
     id:     number;
-    date:   string;
+    date:   Date;
     userId: number;
     pmt:    number;
     ppmt:   number;
