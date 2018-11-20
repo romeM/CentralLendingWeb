@@ -3,20 +3,17 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from '../../home';
 import { RegisterComponent } from '../../register';
 import { LoginComponent } from '../../login';
-import { DashboardComponent } from '../../dashboard/dashboard.component';
-import { UserProfileComponent } from '../../user-profile/user-profile.component';
-import { ProjectsComponent } from '../../projects/projects.component';
-import { TypographyComponent } from '../../typography/typography.component';
-import { IconsComponent } from '../../icons/icons.component';
-import { MapsComponent } from '../../maps/maps.component';
-import { NotificationsComponent } from '../../notifications/notifications.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { TypographyComponent } from './typography/typography.component';
+import { IconsComponent } from './icons/icons.component';
+import { MapsComponent } from './maps/maps.component';
+import { NotificationsComponent } from './notifications/notifications.component';
 
-import { AuthGuard } from '../../modules/core/guards';
+import { AuthGuard } from '../core/guards';
 
-export const AdminLayoutRoutes: Routes = [
-    { path: 'home',      component: HomeComponent },
-    { path: 'login',      component: LoginComponent },
-    { path: 'register',      component: RegisterComponent },
+export const DashboardLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'user-profile',   component: UserProfileComponent, canActivate: [AuthGuard] },
     { path: 'projects',     component: ProjectsComponent, canActivate: [AuthGuard] },

@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { ROUTES } from '../sidebar/sidebar.component';
 import {Location, LocationStrategy, PathLocationStrategy} from '@angular/common';
-import { AlertService } from '../../modules/core/services';
+import { AlertService } from '../../../core/services';
 import { Router } from '@angular/router';
 import Chart from 'chart.js';
 
@@ -142,7 +142,7 @@ export class NavbarComponent implements OnInit {
     disconnect() {
         localStorage.removeItem('currentUser');
         this.alertService.success('Utilisateur deconnecté', true);
-        this.router.navigate(['/login']);
+        this.router.navigate(['']);
     }
 
     getTitle(){

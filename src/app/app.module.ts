@@ -7,11 +7,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { AppRoutingModule } from './app.routing';
-import { ComponentsModule } from './components/components.module';
+import { ComponentsModule } from './modules/dashboard/components/components.module';
 
 import { AppComponent } from './app.component';
+
+import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
 import { CoreModule } from './modules/core/core.module';
-import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { DashboardLayoutComponent } from './modules/dashboard/layouts/dashboard-layout.component';
 
 @NgModule({
   imports: [
@@ -27,8 +31,10 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
   ],
   declarations: [
     AppComponent,
-    AdminLayoutComponent,
-
+    DashboardLayoutComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
