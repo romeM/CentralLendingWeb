@@ -339,7 +339,7 @@
   height: 260px;
   padding-top: 80px;
   padding-bottom: 45px;
-  @include panel-gradient($black-color);
+  @include panel-gradient($light-black);
   position: relative;
   overflow: hidden;
 
