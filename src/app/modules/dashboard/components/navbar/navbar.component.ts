@@ -145,10 +145,9 @@ export class NavbarComponent implements OnInit {
     }
 
     getTitle(){
-    
         if (localStorage.getItem('currentUser')) {
             var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            return currentUser.username;
+            return currentUser.userName;
         }
       return 'Dashboard';
     }
