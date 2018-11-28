@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserMonthlyStatisticsService } from '../../core/services';
-import { UserMonthlyStatistics } from '../../core/models';
+import { PersonMonthlyStatisticsService } from '../../core/services';
+import { PersonMonthlyStatistics } from '../../core/models';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
 
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
-  private userMonthlyStatistics:Array<UserMonthlyStatistics>;
+  private personMonthlyStatistics:Array<PersonMonthlyStatistics>;
   private lineChartLabels:Array<string> = [];
   private ipmtMonthlyStatistics:Array<number>;
   // events
@@ -32,22 +32,22 @@ export class DashboardComponent implements OnInit {
   public chartHovered(e:any):void {
     console.log(e);
   }
-  constructor(private userMonthlyStatisticsService: UserMonthlyStatisticsService) { }
+  constructor(private personMonthlyStatisticsService: PersonMonthlyStatisticsService) { }
 
   ngOnInit() {
-    this.userMonthlyStatisticsService.get().then(userMonthlyStatistics => 
+    this.personMonthlyStatisticsService.get().then(personMonthlyStatistics => 
       { 
-        this.userMonthlyStatistics = userMonthlyStatistics; 
-        let lineChartLabelsMonths = this.userMonthlyStatisticsService.getDateFromUserMonthlyStatistics(this.userMonthlyStatistics);
+        this.personMonthlyStatistics = personMonthlyStatistics; 
+        let lineChartLabelsMonths = this.personMonthlyStatisticsService.getDateFromPersonMonthlyStatistics(this.personMonthlyStatistics);
         this.lineChartLabels.length = 0;
           for (let i = lineChartLabelsMonths.length - 1; i >= 0; i--) {
             this.lineChartLabels.push(lineChartLabelsMonths[i]);
           }
 
         this.lineChartData = [
-          {data: this.userMonthlyStatisticsService.getIPMTFromUserMonthlyStatistics(this.userMonthlyStatistics), label: 'IPMT'},
-          {data: this.userMonthlyStatisticsService.getPMTFromUserMonthlyStatistics(this.userMonthlyStatistics), label: 'PMT'},
-          {data: this.userMonthlyStatisticsService.getPPMTFromUserMonthlyStatistics(this.userMonthlyStatistics), label: 'PPMT'}
+          {data: this.personMonthlyStatisticsService.getIPMTFromPersonMonthlyStatistics(this.personMonthlyStatistics), label: 'IPMT'},
+          {data: this.personMonthlyStatisticsService.getPMTFromPersonMonthlyStatistics(this.personMonthlyStatistics), label: 'PMT'},
+          {data: this.personMonthlyStatisticsService.getPPMTFromPersonMonthlyStatistics(this.personMonthlyStatistics), label: 'PPMT'}
         ];
       });
   }

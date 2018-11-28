@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService, UserService } from '../../core/services';
-import { User } from 'app/modules/core/models';
+import { AlertService, PersonService } from '../../core/services';
+import { Person } from 'app/modules/core/models';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
@@ -10,22 +10,22 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  private user: User;
+  private person: Person;
   loading = false;
   image: string;
 
-  constructor(private userService: UserService,
+  constructor(private personService: PersonService,
     private alertService: AlertService) { }
 
   ngOnInit() {
-    this.user = this.userService.currentUser();
+    this.person = this.personService.currentUser();
   }
 
   onFileChanged(event) {
     var selectedFile = event.target.files[0]
     var myReader:FileReader = new FileReader();
     myReader.onloadend = (e) => {
-      this.user.image = myReader.result.toString();
+      this.person.image = myReader.result.toString();
     }
     myReader.readAsDataURL(selectedFile);
   }
@@ -36,11 +36,11 @@ export class UserProfileComponent implements OnInit {
 
   onSave() {
     this.loading = true;
-    this.userService.update(this.user).pipe(first())
+    this.personService.update(this.person).pipe(first())
             .subscribe(
                 data => {
                     this.alertService.success('Save successful', true);
-                    localStorage.setItem('currentUser', JSON.stringify(this.user));
+                    localStorage.setItem('currentUser', JSON.stringify(this.person));
                     this.loading = false;
                 },
                 error => {

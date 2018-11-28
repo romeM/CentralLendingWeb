@@ -1,5 +1,5 @@
 ﻿export * from './alert.service';
 export * from './authentication.service';
-export * from './user.service';
+export * from './person.service';
 export * from './project.service';
-export * from './user-monthlystatistics.service';
+export * from './person-monthlystatistics.service';
