@@ -92,10 +92,14 @@
         </div>
         <div class="card-body">
           <div class="author">
-            <a href="#">
-              <img class="avatar border-gray" src="../assets/img/mike.jpg" alt="...">
+              <img class="avatar border-gray"  src="{{user.image || '../assets/img/defaultPic.jpg' }}" (click)="fileInput.click()">
+              <p class="text-center now-ui-icons">
+                  <input 
+                      style="display: none" accept="image/x-png,image/gif,image/jpeg"
+                      type="file" (change)="onFileChanged($event)" 
+                      #fileInput>
+                </p>
               <h5 class="title">{{user.firstName}} {{user.lastName}}</h5>
-            </a>
             <p class="description">
               {{user.userName}}
             </p>
@@ -103,6 +107,7 @@
           <p class="description text-center">
             {{user.aboutMe}}
           </p>
+          
         </div>
         <hr>
         <div class="button-container">

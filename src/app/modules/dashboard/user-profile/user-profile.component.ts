@@ -12,12 +12,26 @@ import { first } from 'rxjs/operators';
 export class UserProfileComponent implements OnInit {
   private user: User;
   loading = false;
+  image: string;
 
   constructor(private userService: UserService,
     private alertService: AlertService) { }
 
   ngOnInit() {
     this.user = this.userService.currentUser();
+  }
+
+  onFileChanged(event) {
+    var selectedFile = event.target.files[0]
+    var myReader:FileReader = new FileReader();
+    myReader.onloadend = (e) => {
+      this.user.image = myReader.result.toString();
+    }
+    myReader.readAsDataURL(selectedFile);
+  }
+
+  onUpload() {
+    
   }
 
   onSave() {

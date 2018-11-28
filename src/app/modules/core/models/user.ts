@@ -10,6 +10,7 @@
     city: string;
     country: string;
     postalcode: string;
-    CreatedOn: Date;
-    UpdatedOn: Date;
+    createdOn: Date;
+    updatedOn: Date;
+    image: string;
 }
