@@ -13,7 +13,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { ChartsModule } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
-
+import { NgSelectModule } from '@ng-select/ng-select';
+import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule, MatCheckboxModule} from '@angular/material';
 @NgModule({
   imports: [
     CommonModule,
@@ -22,6 +23,12 @@ import { ToastrModule } from 'ngx-toastr';
     ReactiveFormsModule,
     ChartsModule,
     NgbModule,
+    NgSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatInputModule,
     ToastrModule.forRoot()
   ],
   declarations: [

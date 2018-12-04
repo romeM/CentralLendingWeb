@@ -11,8 +11,6 @@ import { JwtInterceptor, ErrorInterceptor } from './modules/core/helpers/';
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './modules/dashboard/components/components.module';
 import { ChartsModule } from 'ng2-charts';
-
-
 import { AppComponent } from './app.component';
 
 import { HomeComponent } from './home/home.component';
