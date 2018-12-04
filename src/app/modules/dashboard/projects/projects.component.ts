@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ProjectService, PersonService } from '../../core/services';
+import { ProjectService, PersonService, NotificationService } from '../../core/services';
 import { Project, PersonProject } from '../../core/models';
 import { delay } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -17,8 +17,10 @@ export class ProjectsComponent implements OnInit {
   projects: Project[];
   allprojects: Project[];
   lastKeypress: number = 0;
+  projectAddedMessage:string = "Le projet a été mis à jour avec succès."
 
-  constructor(private projectService: ProjectService, private personService: PersonService, private modalService: NgbModal) { }
+  constructor(private projectService: ProjectService, private personService: PersonService, 
+    private modalService: NgbModal, private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.loadProjects();
@@ -59,7 +61,10 @@ export class ProjectsComponent implements OnInit {
   }
 
   savePersonProject(personProject){
-    this.projectService.post(personProject).subscribe();
+    this.projectService.post(personProject)
+      .subscribe(pp => {
+        this.notificationService.success(this.projectAddedMessage) 
+      });
   }
 
 }

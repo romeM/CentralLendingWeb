@@ -1,8 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from '../../home';
-import { RegisterComponent } from '../../register';
-import { LoginComponent } from '../../login';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { ProjectsComponent } from './projects/projects.component';

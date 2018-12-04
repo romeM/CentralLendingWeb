@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor, ErrorInterceptor } from './modules/core/helpers/';
-
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './modules/dashboard/components/components.module';
@@ -30,7 +30,8 @@ import { DashboardLayoutComponent } from './modules/dashboard/layouts/dashboard-
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
-    NgbModule.forRoot()
+    NgbModule.forRoot(),
+    ToastrModule.forRoot()
   ],
   declarations: [
     AppComponent,

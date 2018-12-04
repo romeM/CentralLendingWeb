@@ -12,7 +12,6 @@ import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { ChartsModule } from 'ng2-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ToastrModule } from 'ngx-toastr';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule, MatCheckboxModule} from '@angular/material';
 @NgModule({
@@ -28,8 +27,7 @@ import { MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputM
     MatNativeDateModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    MatInputModule,
-    ToastrModule.forRoot()
+    MatInputModule
   ],
   declarations: [
     DashboardComponent,
