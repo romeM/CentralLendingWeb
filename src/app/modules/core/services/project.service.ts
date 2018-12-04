@@ -27,6 +27,10 @@ export class ProjectService {
     post(personProject : PersonProject) {
         return this.httpClient.post(`${environment.serverApi}/api/project`, personProject);
     }
+
+    delete(id : number) {
+        return this.httpClient.delete(`${environment.serverApi}/api/project/${id}`);
+    }
     
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error);

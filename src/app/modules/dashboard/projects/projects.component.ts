@@ -14,17 +14,27 @@ import { NgSelectModule, NgSelectComponent } from '@ng-select/ng-select';
 })
 export class ProjectsComponent implements OnInit {
   personProjects: PersonProject[] = [];
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
   projects: Project[];
   allprojects: Project[];
   lastKeypress: number = 0;
-  projectAddedMessage:string = "Le projet a été mis à jour avec succès."
+  addedProjectMessage:string = "Le projet a été mis à jour avec succès."
+  deletedProjectMessage:string = "Le projet a été supprimé."
 
   constructor(private projectService: ProjectService, private personService: PersonService, 
-    private modalService: NgbModal, private notificationService: NotificationService) { }
+    private modalService: NgbModal, private notificationService: NotificationService,
+    private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.loadProjects();
     this.loadPersonProjects();
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
   }
 
   openSelect(select: NgSelectComponent) {
@@ -44,7 +54,9 @@ export class ProjectsComponent implements OnInit {
     const index: number = this.allprojects.indexOf($event);
     if (index !== -1) {
         this.allprojects.splice(index, 1);
-    }        
+    }
+
+    personProject.undefined=true;
   }
 
   private loadProjects() {
@@ -60,11 +72,28 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  savePersonProject(personProject){
+  save(personProject){
     this.projectService.post(personProject)
-      .subscribe(pp => {
-        this.notificationService.success(this.projectAddedMessage) 
+      .subscribe(id => {
+        personProject.undefined=false;
+        personProject.id= id;
+        this.notificationService.success(this.addedProjectMessage);
       });
   }
+  edit(personProject){
+    personProject.undefined=true;
+  }
+
+  delete(personProject){
+    this.projectService.delete(personProject.id)
+      .subscribe(pp => {
+          const index: number = this.personProjects.indexOf(personProject);
+          if (index !== -1) {
+              this.personProjects.splice(index, 1);
+          }   
+          this.notificationService.warning(this.deletedProjectMessage);
+      });
+  }
+
 
 }

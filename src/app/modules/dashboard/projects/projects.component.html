@@ -18,7 +18,7 @@
                     bindValue="id"
                     (change)="onChange($event)"
                     labelForId="project"
-                    placeholder="Select project"
+                    placeholder="Selectionnez un project"
                     [virtualScroll]="true">
                       <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
                           <div><span [ngOptionHighlight]="search">{{item.name}}</span></div>
@@ -57,7 +57,8 @@
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let personProject of personProjects; trackBy:identify">
+                <ng-container *ngFor="let personProject of personProjects; trackBy:identify">
+                <tr >
                   <td>
                       <a href="{{personProject.project.link}}" target="_blank">
                       {{personProject.project.name}}
@@ -79,19 +80,58 @@
                       {{personProject.project.term}}
                   </td>
                   <td>
-                      <input type="text" placeholder="Montant" [(ngModel)]="personProject.amount" name="amount" required>
+                      {{personProject.amount | currency:'EUR'}}
                   </td>
                   <td>
-                    <mat-form-field>
-                      <input matInput  [matDatepicker]="startDatepicker" placeholder="Choisir la date de début" [(ngModel)]="personProject.startDate">
-                      <mat-datepicker-toggle matSuffix [for]="startDatepicker"></mat-datepicker-toggle>
-                      <mat-datepicker #startDatepicker></mat-datepicker>
-                    </mat-form-field>
+                      {{personProject.startDate | date:'mediumDate' }}
                   </td>
                   <td>
-                      <mat-checkbox (change)="savePersonProject(personProject)">Save</mat-checkbox>
+                      <button mat-mini-fab color="primary" *ngIf="personProject.undefined==undefined || personProject.undefined==false" (click)="edit(personProject)">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      &nbsp;&nbsp;
+                      <button mat-mini-fab color="warn" *ngIf="personProject.undefined==undefined || personProject.undefined==false" (click)="delete(personProject)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
                   </td>
                 </tr>
+                <tr><td colspan="8" *ngIf="personProject.undefined">
+                    <mat-horizontal-stepper [linear]="isLinear" #stepper>
+                        <mat-step [stepControl]="firstFormGroup" label="Entrez le montant investi">
+                          <form [formGroup]="firstFormGroup">
+                            <mat-form-field>
+                              <input matInput type="number" placeholder="Montant investi" formControlName="firstCtrl"  [(ngModel)]="personProject.amount" required>
+                            </mat-form-field>
+                            <div>
+                              <button mat-button matStepperNext>Suivant</button>
+                            </div>
+                          </form>
+                        </mat-step>
+                        <mat-step [stepControl]="secondFormGroup">
+                          <form [formGroup]="secondFormGroup">
+                            <ng-template matStepLabel>Entrez la date de debut de l'investissement</ng-template>
+                            <mat-form-field>
+                                <input matInput [matDatepicker]="startDatepicker" formControlName="secondCtrl" placeholder="Choisir la date de début" [(ngModel)]="personProject.startDate">
+                                <mat-datepicker-toggle matSuffix [for]="startDatepicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startDatepicker></mat-datepicker>
+                              </mat-form-field>
+                            <div>
+                              <button mat-button matStepperPrevious>Retour</button>
+                              <button mat-button matStepperNext>Suivant</button>
+                            </div>
+                          </form>
+                        </mat-step>
+                        <mat-step>
+                            <ng-template matStepLabel>Validation</ng-template>
+                            Merci de valider l'investissement à hauteur de {{personProject.amount | currency:'EUR'}} à partir du {{personProject.startDate | date:'mediumDate' }}.
+                            <div>
+                              <button mat-button matStepperPrevious>Retour</button>
+                              <button mat-button (click)="save(personProject)">Valider</button>
+                            </div>
+                          </mat-step>
+                      </mat-horizontal-stepper>
+                </td></tr>
+              </ng-container>
               </tbody>
             </table>
           </div>

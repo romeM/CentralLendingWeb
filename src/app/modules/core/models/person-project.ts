@@ -7,4 +7,5 @@ export class PersonProject {
     project:    Project;
     amount:   number;
     startDate:   number;
+    undefined: boolean;
 }
