@@ -27,22 +27,24 @@ export class PersonMonthlyStatisticsService {
 
     getDateFromPersonMonthlyStatistics(personMonthlyStatistics: Array<PersonMonthlyStatistics>): Array<string>
     {
-        return personMonthlyStatistics.map( ums => this.monthNames[new Date(ums.date).getUTCMonth()]);
+        return personMonthlyStatistics.map(ums => 
+            this.monthNames[new Date(ums.date).getUTCMonth()]
+            + (new Date(ums.date).getUTCMonth() == 0 ? ' ' + new Date(ums.date).getFullYear().toString() : ''));
     }
 
     getIPMTFromPersonMonthlyStatistics(personMonthlyStatistics: Array<PersonMonthlyStatistics>): Array<number>
     {
-        return personMonthlyStatistics.map( ums => ums.ipmt);
+        return personMonthlyStatistics.map(ums => ums.ipmt);
     }
 
     getPMTFromPersonMonthlyStatistics(personMonthlyStatistics: Array<PersonMonthlyStatistics>): Array<number>
     {
-        return personMonthlyStatistics.map( ums => ums.pmt);
+        return personMonthlyStatistics.map(ums => ums.pmt);
     }
 
     getPPMTFromPersonMonthlyStatistics(personMonthlyStatistics: Array<PersonMonthlyStatistics>): Array<number>
     {
-        return personMonthlyStatistics.map( ums => ums.ppmt);
+        return personMonthlyStatistics.map(ums => ums.ppmt);
     }
     
 }

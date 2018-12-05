@@ -111,7 +111,7 @@
                           <form [formGroup]="secondFormGroup">
                             <ng-template matStepLabel>Entrez la date de debut de l'investissement</ng-template>
                             <mat-form-field>
-                                <input matInput [matDatepicker]="startDatepicker" formControlName="secondCtrl" placeholder="Choisir la date de début" [(ngModel)]="personProject.startDate">
+                                <input matInput [matDatepicker]="startDatepicker" formControlName="secondCtrl" placeholder="Choisir la date de début" [(ngModel)]="personProject.startDate" required>
                                 <mat-datepicker-toggle matSuffix [for]="startDatepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #startDatepicker></mat-datepicker>
                               </mat-form-field>

@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
         this.personMonthlyStatistics = personMonthlyStatistics; 
         let lineChartLabelsMonths = this.personMonthlyStatisticsService.getDateFromPersonMonthlyStatistics(this.personMonthlyStatistics);
         this.lineChartLabels.length = 0;
-          for (let i = lineChartLabelsMonths.length - 1; i >= 0; i--) {
+          for (let i = 0; i < lineChartLabelsMonths.length; i++) {
             this.lineChartLabels.push(lineChartLabelsMonths[i]);
           }
 
