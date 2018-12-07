@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CurrencyPipe } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProjectService, PersonService, NotificationService } from '../../core/services';
 import { Project, PersonProject } from '../../core/models';
-import { delay } from 'rxjs/operators';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule, NgSelectComponent } from '@ng-select/ng-select';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-projects',
@@ -14,11 +13,9 @@ import { NgSelectModule, NgSelectComponent } from '@ng-select/ng-select';
 })
 export class ProjectsComponent implements OnInit {
   personProjects: PersonProject[] = [];
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
+  formA: FormGroup;
+  formB: FormGroup;
   projects: Project[];
-  allprojects: Project[];
-  lastKeypress: number = 0;
   addedProjectMessage:string = "Le projet a été mis à jour avec succès."
   deletedProjectMessage:string = "Le projet a été supprimé."
 
@@ -27,13 +24,24 @@ export class ProjectsComponent implements OnInit {
     private _formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.loadProjects();
-    this.loadPersonProjects();
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
+    this.loadProjectsData();
+    this.formA = this._formBuilder.group({
+      amount: ['', Validators.required]
     });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
+    this.formB = this._formBuilder.group({
+      startDate: ['', Validators.required]
+    });
+  }
+
+  loadProjectsData(){
+    forkJoin(this.projectService.get(),
+    this.projectService.getPersonProjects())
+    .subscribe(([projects, personProjects]) =>  {
+      this.personProjects = personProjects;
+      this.personProjects.forEach( pp => {
+        projects = projects.filter(item => item.id !== pp.project.id);
+      });
+      this.projects = projects;
     });
   }
 
@@ -51,28 +59,14 @@ export class ProjectsComponent implements OnInit {
     personProject.personId= this.personService.currentUser().id;
     personProject.project = $event;
     this.personProjects.push(personProject);
-    const index: number = this.allprojects.indexOf($event);
-    if (index !== -1) {
-        this.allprojects.splice(index, 1);
-    }
+    this.projects = this.removeProjectFromList($event, this.projects);
 
     personProject.undefined=true;
   }
 
-  private loadProjects() {
-    this.projectService.get().pipe(delay(500)).subscribe(projects => {
-        this.allprojects = projects;
-        this.projects = [...this.allprojects];
-    });
-  }
-
-  private loadPersonProjects() {
-    this.projectService.getPersonProjects().subscribe(personProjects => {
-        this.personProjects = personProjects;
-    });
-  }
-
   save(personProject){
+    personProject.amount = this.formA.value.amount;
+    personProject.startDate = this.formB.value.startDate;
     this.projectService.post(personProject)
       .subscribe(id => {
         personProject.undefined=false;
@@ -80,20 +74,33 @@ export class ProjectsComponent implements OnInit {
         this.notificationService.success(this.addedProjectMessage);
       });
   }
+
   edit(personProject){
+    this.formA.controls['amount'].setValue(personProject.amount);
+    this.formB.controls['startDate'].setValue(personProject.startDate);
     personProject.undefined=true;
+  }
+
+  cancel(personProject){
+    if (personProject.id == undefined){
+      this.personProjects = this.removeProjectFromList(personProject, this.personProjects);
+    } 
+    else{
+      personProject.undefined=false;
+    }
   }
 
   delete(personProject){
     this.projectService.delete(personProject.id)
       .subscribe(pp => {
-          const index: number = this.personProjects.indexOf(personProject);
-          if (index !== -1) {
-              this.personProjects.splice(index, 1);
-          }   
+        this.personProjects = this.removeProjectFromList(personProject, this.personProjects);
+        this.projects.push(personProject.project);
           this.notificationService.warning(this.deletedProjectMessage);
       });
   }
 
-
+  private removeProjectFromList(project, list)
+  {   
+    return list.filter(item => item.id !== project.id);
+  }
 }

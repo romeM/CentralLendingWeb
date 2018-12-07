@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertService, PersonService } from '../../core/services';
+import { AlertService, PersonService, NotificationService } from '../../core/services';
 import { Person } from 'app/modules/core/models';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { first } from 'rxjs/operators';
@@ -13,9 +13,10 @@ export class UserProfileComponent implements OnInit {
   private person: Person;
   loading = false;
   image: string;
+  saveMessage: string = "Les modifications ont été enregistré avec succès.";
 
   constructor(private personService: PersonService,
-    private alertService: AlertService) { }
+    private alertService: AlertService, private notificationService: NotificationService) { }
 
   ngOnInit() {
     this.person = this.personService.currentUser();
@@ -30,10 +31,6 @@ export class UserProfileComponent implements OnInit {
     myReader.readAsDataURL(selectedFile);
   }
 
-  onUpload() {
-    
-  }
-
   onSave() {
     this.loading = true;
     this.personService.update(this.person).pipe(first())
@@ -42,6 +39,7 @@ export class UserProfileComponent implements OnInit {
                     this.alertService.success('Save successful', true);
                     localStorage.setItem('currentUser', JSON.stringify(this.person));
                     this.loading = false;
+                    this.notificationService.success(this.saveMessage);
                 },
                 error => {
                     this.alertService.error(error);

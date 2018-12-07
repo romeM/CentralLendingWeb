@@ -86,6 +86,9 @@
                       {{personProject.startDate | date:'mediumDate' }}
                   </td>
                   <td>
+                      <button mat-mini-fab color="warn" *ngIf="personProject.undefined" (click)="cancel(personProject)">
+                        <mat-icon>cancel</mat-icon>
+                      </button>
                       <button mat-mini-fab color="primary" *ngIf="personProject.undefined==undefined || personProject.undefined==false" (click)="edit(personProject)">
                         <mat-icon>edit</mat-icon>
                       </button>
@@ -96,22 +99,22 @@
                   </td>
                 </tr>
                 <tr><td colspan="8" *ngIf="personProject.undefined">
-                    <mat-horizontal-stepper [linear]="isLinear" #stepper>
-                        <mat-step [stepControl]="firstFormGroup" label="Entrez le montant investi">
-                          <form [formGroup]="firstFormGroup">
+                    <mat-horizontal-stepper linear #stepper>
+                        <mat-step [stepControl]="formA" label="Entrez le montant investi">
+                          <form [formGroup]="formA">
                             <mat-form-field>
-                              <input matInput type="number" placeholder="Montant investi" formControlName="firstCtrl"  [(ngModel)]="personProject.amount" required>
+                              <input matInput type="number" placeholder="Montant investi" formControlName="amount" required>
                             </mat-form-field>
                             <div>
                               <button mat-button matStepperNext>Suivant</button>
                             </div>
                           </form>
                         </mat-step>
-                        <mat-step [stepControl]="secondFormGroup">
-                          <form [formGroup]="secondFormGroup">
+                        <mat-step [stepControl]="formB">
+                          <form [formGroup]="formB">
                             <ng-template matStepLabel>Entrez la date de debut de l'investissement</ng-template>
                             <mat-form-field>
-                                <input matInput [matDatepicker]="startDatepicker" formControlName="secondCtrl" placeholder="Choisir la date de début" [(ngModel)]="personProject.startDate" required>
+                                <input matInput [matDatepicker]="startDatepicker" formControlName="startDate" placeholder="Choisir la date de début" required>
                                 <mat-datepicker-toggle matSuffix [for]="startDatepicker"></mat-datepicker-toggle>
                                 <mat-datepicker #startDatepicker></mat-datepicker>
                               </mat-form-field>
@@ -123,7 +126,7 @@
                         </mat-step>
                         <mat-step>
                             <ng-template matStepLabel>Validation</ng-template>
-                            Merci de valider l'investissement à hauteur de {{personProject.amount | currency:'EUR'}} à partir du {{personProject.startDate | date:'mediumDate' }}.
+                            Merci de valider l'investissement à hauteur de {{formA.value.amount | currency:'EUR'}} à partir du {{formB.value.startDate | date:'mediumDate' }}.
                             <div>
                               <button mat-button matStepperPrevious>Retour</button>
                               <button mat-button (click)="save(personProject)">Valider</button>
