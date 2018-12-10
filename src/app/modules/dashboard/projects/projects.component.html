@@ -86,19 +86,19 @@
                       {{personProject.startDate | date:'mediumDate' }}
                   </td>
                   <td>
-                      <button mat-mini-fab color="warn" *ngIf="personProject.undefined" (click)="cancel(personProject)">
+                      <button mat-mini-fab color="warn" *ngIf="personProject == selectedPersonProject" (click)="cancel(personProject)">
                         <mat-icon>cancel</mat-icon>
                       </button>
-                      <button mat-mini-fab color="primary" *ngIf="personProject.undefined==undefined || personProject.undefined==false" (click)="edit(personProject)">
+                      <button mat-mini-fab color="primary" *ngIf="personProject != selectedPersonProject" (click)="edit(personProject)">
                         <mat-icon>edit</mat-icon>
                       </button>
                       &nbsp;&nbsp;
-                      <button mat-mini-fab color="warn" *ngIf="personProject.undefined==undefined || personProject.undefined==false" (click)="delete(personProject)">
+                      <button mat-mini-fab color="warn" *ngIf="personProject != selectedPersonProject" (click)="delete(personProject)">
                         <mat-icon>delete</mat-icon>
                       </button>
                   </td>
                 </tr>
-                <tr><td colspan="8" *ngIf="personProject.undefined">
+                <tr><td colspan="8" *ngIf="personProject == selectedPersonProject">
                     <mat-horizontal-stepper linear #stepper>
                         <mat-step [stepControl]="formA" label="Entrez le montant investi">
                           <form [formGroup]="formA">

@@ -16,6 +16,7 @@ export class ProjectsComponent implements OnInit {
   formA: FormGroup;
   formB: FormGroup;
   projects: Project[];
+  selectedPersonProject: PersonProject;
   addedProjectMessage:string = "Le projet a été mis à jour avec succès."
   deletedProjectMessage:string = "Le projet a été supprimé."
 
@@ -50,18 +51,20 @@ export class ProjectsComponent implements OnInit {
 }
 
   closeSelect(select: NgSelectComponent) {
-      select.close();
+    select.close();
   }
 
   onChange($event){
+    if($event == undefined)
+      return;
     var personProject = new PersonProject()
     personProject.projectId= $event.id; 
     personProject.personId= this.personService.currentUser().id;
     personProject.project = $event;
+    this.personProjects = this.personProjects.filter(item => item.id != undefined);
     this.personProjects.push(personProject);
-    this.projects = this.removeProjectFromList($event, this.projects);
-
-    personProject.undefined=true;
+    this.projects = this.projects.filter(item => item !== $event);
+    this.selectPersonProject(personProject);
   }
 
   save(personProject){
@@ -69,38 +72,43 @@ export class ProjectsComponent implements OnInit {
     personProject.startDate = this.formB.value.startDate;
     this.projectService.post(personProject)
       .subscribe(id => {
-        personProject.undefined=false;
         personProject.id= id;
+        this.unselectPersonProject();
         this.notificationService.success(this.addedProjectMessage);
       });
   }
 
   edit(personProject){
-    this.formA.controls['amount'].setValue(personProject.amount);
-    this.formB.controls['startDate'].setValue(personProject.startDate);
-    personProject.undefined=true;
+    this.selectPersonProject(personProject);
   }
 
   cancel(personProject){
-    if (personProject.id == undefined){
-      this.personProjects = this.removeProjectFromList(personProject, this.personProjects);
-    } 
-    else{
-      personProject.undefined=false;
+    if(personProject.id == undefined){
+      this.personProjects = this.personProjects.filter(item => item !== personProject);
+      this.projects.push(personProject.project);
     }
+
+    this.unselectPersonProject();
   }
 
   delete(personProject){
     this.projectService.delete(personProject.id)
       .subscribe(pp => {
-        this.personProjects = this.removeProjectFromList(personProject, this.personProjects);
+        this.personProjects = this.personProjects.filter(item => item !== personProject);
         this.projects.push(personProject.project);
-          this.notificationService.warning(this.deletedProjectMessage);
+        this.notificationService.warning(this.deletedProjectMessage);
       });
   }
 
-  private removeProjectFromList(project, list)
-  {   
-    return list.filter(item => item.id !== project.id);
+  private selectPersonProject(personProject){
+    this.selectedPersonProject = personProject;
+    this.formA.controls['amount'].setValue(personProject.amount);
+    this.formB.controls['startDate'].setValue(personProject.startDate);
+  }
+
+  private unselectPersonProject(){
+    this.selectedPersonProject = undefined;
+    this.formA.controls['amount'].setValue(undefined);
+    this.formB.controls['startDate'].setValue(undefined);
   }
 }
