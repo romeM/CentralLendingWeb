@@ -12,24 +12,7 @@ export class ProjectService {
     }
 
     get(): Observable<Project[]> {
-        return this.httpClient.get<Project[]>(`${environment.serverApi}/api/project`);
-    }
-
-    getPersonProjects(): Observable<PersonProject[]> {
-        return this.httpClient.get<PersonProject[]>(`${environment.serverApi}/api/project/person`);
-    }
-
-    suggest(term): Promise<Project[]> {
-        return this.httpClient.get<Project[]>(`${environment.serverApi}/api/project/suggest/` + term).toPromise()
-            .catch(this.handleError);
-    }
-
-    post(personProject : PersonProject) {
-        return this.httpClient.post(`${environment.serverApi}/api/project`, personProject);
-    }
-
-    delete(id : number) {
-        return this.httpClient.delete(`${environment.serverApi}/api/project/${id}`);
+        return this.httpClient.get<Project[]>(`${environment.serverApi}/project`);
     }
     
     private handleError(error: any): Promise<any> {

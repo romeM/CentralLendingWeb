@@ -36,7 +36,7 @@ export class ProjectsComponent implements OnInit {
 
   loadProjectsData(){
     forkJoin(this.projectService.get(),
-    this.projectService.getPersonProjects())
+    this.personService.getPersonProjects())
     .subscribe(([projects, personProjects]) =>  {
       this.personProjects = personProjects;
       this.personProjects.forEach( pp => {
@@ -46,21 +46,19 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  openSelect(select: NgSelectComponent) {
-    select.open();
-}
-
-  closeSelect(select: NgSelectComponent) {
-    select.close();
-  }
-
   onChange($event){
     if($event == undefined)
       return;
+
+    //Put unsaved person project back to Project list
+    var personProjectsToRemove = this.personProjects.filter(item => item.id == undefined);
+    personProjectsToRemove.forEach( item => { this.projects.push(item.project)});
+    
     var personProject = new PersonProject()
     personProject.projectId= $event.id; 
     personProject.personId= this.personService.currentUser().id;
     personProject.project = $event;
+    personProject.startDate = $event.startDate;
     this.personProjects = this.personProjects.filter(item => item.id != undefined);
     this.personProjects.push(personProject);
     this.projects = this.projects.filter(item => item !== $event);
@@ -70,7 +68,7 @@ export class ProjectsComponent implements OnInit {
   save(personProject){
     personProject.amount = this.formA.value.amount;
     personProject.startDate = this.formB.value.startDate;
-    this.projectService.post(personProject)
+    this.personService.addProject(personProject)
       .subscribe(id => {
         personProject.id= id;
         this.unselectPersonProject();
@@ -92,7 +90,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   delete(personProject){
-    this.projectService.delete(personProject.id)
+    this.personService.removeProject(personProject.id)
       .subscribe(pp => {
         this.personProjects = this.personProjects.filter(item => item !== personProject);
         this.projects.push(personProject.project);

@@ -1,7 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Person } from '../models';
+import { Person, PersonProject } from '../models';
 import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class PersonService {
@@ -30,4 +31,18 @@ export class PersonService {
     delete(id: number) {
         return this.http.delete(`${environment.serverApi}/person/` + id);
     }
+
+    
+    getPersonProjects(): Observable<PersonProject[]> {
+        return this.http.get<PersonProject[]>(`${environment.serverApi}/person/projects`);
+    }
+
+    addProject(personProject : PersonProject) {
+        return this.http.post(`${environment.serverApi}/person/project`, personProject);
+    }
+
+    removeProject(id : number) {
+        return this.http.delete(`${environment.serverApi}/person/project/${id}`);
+    }
+
 }

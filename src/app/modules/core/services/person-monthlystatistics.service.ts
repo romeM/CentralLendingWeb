@@ -16,7 +16,7 @@ export class PersonMonthlyStatisticsService {
     }
 
     get(): Promise<PersonMonthlyStatistics[]> {
-        return this.httpClient.get<PersonMonthlyStatistics[]>(`${environment.serverApi}/api/personmonthlystatistics/${this.personService.currentUser().id}`).toPromise()
+        return this.httpClient.get<PersonMonthlyStatistics[]>(`${environment.serverApi}/personmonthlystatistics/${this.personService.currentUser().id}`).toPromise()
             .catch(this.handleError);
     }
     
