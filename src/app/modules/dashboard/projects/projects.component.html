@@ -5,26 +5,16 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title"> Projets</h4>
+          <h4 class="card-title"> Projets</h4> 
+          <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />          
         </div>
-        <div class="card-body">
-
+        <div class="card-body" *ngIf="!loading">
             <div class="row">
-                <div class="col-md-6 px-1">
-                    <ng-select [items]="projects"
-                    #select
-                    bindLabel="name"
-                    dropdownPosition="auto"
-                    bindValue="id"
-                    (change)="onChange($event)"
-                    labelForId="project"
-                    placeholder="Selectionnez un project"
-                    [virtualScroll]="true">
-                      <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
-                          <div><span [ngOptionHighlight]="search">{{item.name}}</span></div>
-                          <small><b>Plateforme:</b> {{item.platform}} | <b>Note:</b> {{item.note}}</small>
-                      </ng-template>
-                    </ng-select>
+                <div class="col-md-12 px-4">
+                    <button mat-mini-fab color="primary" (click)="addProject()">
+                      <mat-icon>add_circle</mat-icon>
+                    </button>
+                </div>
             </div>
           <div class="table-responsive">
             <table class="table">
@@ -58,7 +48,7 @@
               </thead>
               <tbody>
                 <ng-container *ngFor="let personProject of personProjects; trackBy:identify">
-                <tr >
+                <tr *ngIf="personProject.project">
                   <td>
                       <a href="{{personProject.project.link}}" target="_blank">
                       {{personProject.project.name}}
@@ -100,8 +90,30 @@
                 </tr>
                 <tr><td colspan="8" *ngIf="personProject == selectedPersonProject">
                     <mat-horizontal-stepper linear #stepper>
-                        <mat-step [stepControl]="formA" label="Entrez le montant investi">
-                          <form [formGroup]="formA">
+                        <mat-step [stepControl]="formA" label="Selectionnez le projet" *ngIf="!personProject.projectId">
+                            <form [formGroup]="formA">
+                                <ng-select [items]="projects"
+                                #select
+                                bindLabel="name"
+                                dropdownPosition="auto"
+                                bindValue="id"
+                                formControlName="projectId"
+                                labelForId="project"
+                                [appendTo]="'body'"
+                                placeholder="Selectionnez un project"
+                                [virtualScroll]="true">
+                                  <ng-template ng-option-tmp let-item="item" let-search="searchTerm">
+                                      <div><span [ngOptionHighlight]="search">{{item.name}}</span></div>
+                                      <small><b>Plateforme:</b> {{item.platform}} | <b>Note:</b> {{item.note}}</small>
+                                  </ng-template>
+                                </ng-select>
+                              <div>
+                                <button mat-button matStepperNext>Suivant</button>
+                              </div>
+                            </form>
+                          </mat-step>
+                        <mat-step [stepControl]="formB" label="Entrez le montant investi">
+                          <form [formGroup]="formB">
                             <mat-form-field>
                               <input matInput type="number" placeholder="Montant investi" formControlName="amount" required>
                             </mat-form-field>
@@ -110,8 +122,8 @@
                             </div>
                           </form>
                         </mat-step>
-                        <mat-step [stepControl]="formB">
-                          <form [formGroup]="formB">
+                        <mat-step [stepControl]="formC">
+                          <form [formGroup]="formC">
                             <ng-template matStepLabel>Entrez la date de debut de l'investissement</ng-template>
                             <mat-form-field>
                                 <input matInput [matDatepicker]="startDatepicker" formControlName="startDate" placeholder="Choisir la date de début" required>
@@ -126,7 +138,7 @@
                         </mat-step>
                         <mat-step>
                             <ng-template matStepLabel>Validation</ng-template>
-                            Merci de valider l'investissement à hauteur de {{formA.value.amount | currency:'EUR'}} à partir du {{formB.value.startDate | date:'mediumDate' }}.
+                            Merci de valider l'investissement à hauteur de {{formB.value.amount | currency:'EUR'}} à partir du {{formC.value.startDate | date:'mediumDate' }}.
                             <div>
                               <button mat-button matStepperPrevious>Retour</button>
                               <button mat-button (click)="save(personProject)">Valider</button>
@@ -137,10 +149,14 @@
               </ng-container>
               </tbody>
             </table>
+            <div class="col-md-12 px-4" *ngIf="personProjects.length > 8">
+                <button mat-mini-fab color="primary" (click)="addProject()">
+                  <mat-icon>add_circle</mat-icon>
+                </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    
   </div>
 </div>

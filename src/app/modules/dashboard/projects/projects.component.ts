@@ -13,8 +13,10 @@ import { forkJoin } from 'rxjs';
 })
 export class ProjectsComponent implements OnInit {
   personProjects: PersonProject[] = [];
+  loading: boolean = true;
   formA: FormGroup;
   formB: FormGroup;
+  formC: FormGroup;
   projects: Project[];
   selectedPersonProject: PersonProject;
   addedProjectMessage:string = "Le projet a été mis à jour avec succès."
@@ -27,9 +29,12 @@ export class ProjectsComponent implements OnInit {
   ngOnInit() {
     this.loadProjectsData();
     this.formA = this._formBuilder.group({
-      amount: ['', Validators.required]
+      projectId: ['', Validators.required]
     });
     this.formB = this._formBuilder.group({
+      amount: ['', Validators.required]
+    });
+    this.formC = this._formBuilder.group({
       startDate: ['', Validators.required]
     });
   }
@@ -43,40 +48,40 @@ export class ProjectsComponent implements OnInit {
         projects = projects.filter(item => item.id !== pp.project.id);
       });
       this.projects = projects;
+      this.loading = false;
     });
   }
 
-  onChange($event){
-    if($event == undefined)
-      return;
-
-    //Put unsaved person project back to Project list
-    var personProjectsToRemove = this.personProjects.filter(item => item.id == undefined);
-    personProjectsToRemove.forEach( item => { this.projects.push(item.project)});
-    
+  addProject() {
+    this.personProjects = this.personProjects.filter(item => item.id !== undefined);
     var personProject = new PersonProject()
-    personProject.projectId= $event.id; 
-    personProject.personId= this.personService.currentUser().id;
-    personProject.project = $event;
-    personProject.startDate = $event.startDate;
-    this.personProjects = this.personProjects.filter(item => item.id != undefined);
     this.personProjects.push(personProject);
-    this.projects = this.projects.filter(item => item !== $event);
     this.selectPersonProject(personProject);
   }
 
   save(personProject){
-    personProject.amount = this.formA.value.amount;
-    personProject.startDate = this.formB.value.startDate;
+    personProject = this.patch(personProject);
     this.personService.addProject(personProject)
       .subscribe(id => {
         personProject.id= id;
+        this.projects = this.projects.filter(item => item.id !== personProject.projectId);
         this.unselectPersonProject();
         this.notificationService.success(this.addedProjectMessage);
       });
   }
 
+  patch(personProject):PersonProject{
+    personProject.personId= this.personService.currentUser().id;
+    personProject.projectId = this.formA.value.projectId;
+    if (personProject.project == undefined)
+      personProject.project = this.projects.find(p => p.id == personProject.projectId);
+    personProject.amount = this.formB.value.amount;
+    personProject.startDate = this.formC.value.startDate;
+    return personProject;
+  }
+
   edit(personProject){
+    this.personProjects = this.personProjects.filter(item => item.id !== undefined);
     this.selectPersonProject(personProject);
   }
 
@@ -100,13 +105,15 @@ export class ProjectsComponent implements OnInit {
 
   private selectPersonProject(personProject){
     this.selectedPersonProject = personProject;
-    this.formA.controls['amount'].setValue(personProject.amount);
-    this.formB.controls['startDate'].setValue(personProject.startDate);
+    this.formA.controls['projectId'].setValue(personProject.projectId);
+    this.formB.controls['amount'].setValue(personProject.amount);
+    this.formC.controls['startDate'].setValue(personProject.startDate);
   }
 
   private unselectPersonProject(){
     this.selectedPersonProject = undefined;
-    this.formA.controls['amount'].setValue(undefined);
-    this.formB.controls['startDate'].setValue(undefined);
+    this.formA.reset();
+    this.formB.reset();
+    this.formC.reset();
   }
 }
