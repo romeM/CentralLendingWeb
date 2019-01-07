@@ -10,7 +10,7 @@ import { first } from 'rxjs/operators';
   styleUrls: ['./user-profile.component.css']
 })
 export class UserProfileComponent implements OnInit {
-  private person: Person;
+  person: Person;
   loading = false;
   image: string;
   saveMessage: string = "Les modifications ont été enregistré avec succès.";
