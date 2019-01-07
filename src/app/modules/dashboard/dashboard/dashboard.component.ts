@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   public lineChartLegend:boolean = true;
   public lineChartType:string = 'line';
   private personMonthlyStatistics:Array<PersonMonthlyStatistics>;
-  private lineChartLabels:Array<string> = [];
+  public lineChartLabels:Array<string> = [];
   private ipmtMonthlyStatistics:Array<number>;
   // events
   public chartClicked(e:any):void {
