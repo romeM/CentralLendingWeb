@@ -21,9 +21,11 @@ steps:
     ng build --prod
   displayName: 'npm install and build'
 
-# Publish Build Artifacts
-# Publish build artifacts to Azure Pipelines/TFS or a file share
+- task: CopyFiles@2
+  inputs:
+    contents: _buildOutput\**
+    targetFolder: $(Build.ArtifactStagingDirectory)
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'drop' 
+    pathtoPublish: $(Build.ArtifactStagingDirectory)
+    artifactName: MyBuildOutputs
