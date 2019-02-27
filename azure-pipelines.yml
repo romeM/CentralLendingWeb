@@ -28,7 +28,4 @@ steps:
       includeRootFolder: false
       archiveFile: "$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip"
 
-- task: PublishPipelineArtifact@0
-  inputs:
-    artifactName: 'drop'
-    PathtoPublish: '$(System.DefaultWorkingDirectory)'
+- task: PublishPipelineArtifact@1
