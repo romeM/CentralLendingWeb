@@ -10,18 +10,25 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
-- task: NodeTool@0
+- task: Npm@1
+  displayName: 'npm install'
   inputs:
-    versionSpec: '8.x'
-  displayName: 'Install Node.js'
+    command: install
 
-- script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
-
-- task: PublishBuildArtifacts@1
+- task: Npm@1
+  displayName: 'Build Angular'
   inputs:
-    pathtoPublish: $(Build.ArtifactStagingDirectory)
-    artifactName: MyBuildOutputs
+    command: custom
+    customCommand: run build -- --prod
+
+- task: ArchiveFiles@2
+  displayName: 'Archive files'
+  inputs:
+      rootFolderOrFile: "$(System.DefaultWorkingDirectory)"
+      includeRootFolder: false
+      archiveFile: "$(System.DefaultWorkingDirectory)/$(Build.BuildId).zip"
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'drop'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
